@@ -14,7 +14,6 @@ export default [
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
-      
       parserOptions: {
         parser: babelParser,
         ecmaVersion: 'latest',
@@ -41,11 +40,8 @@ export default [
       ...react.configs['jsx-runtime'].rules,
       ...reactHooks.configs.recommended.rules,
       'react/jsx-no-target-blank': 'off',
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
-      ],
-       indent: ['error', 2],
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+      indent: ['error', 2],
       'linebreak-style': [0, 'unix'],
       quotes: ['error', 'single'],
       semi: ['error', 'never'],
@@ -61,4 +57,4 @@ export default [
       'no-unused-vars': ['error', { caughtErrors: 'none' }],
     },
   },
-]
+];

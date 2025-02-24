@@ -1,13 +1,13 @@
 .header {
-    background-color: #ffffff;
-    display: flex;
-    flex-direction: row;
-    padding: 10px 20px;
-    gap: 10px;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: row;
+  padding: 10px 20px;
+  gap: 10px;
 
-    &>h1 {
-        margin-right: auto;
-        margin-block: 0;
-        font-weight: 400;
-    }
+  & > h1 {
+    margin-right: auto;
+    margin-block: 0;
+    font-weight: 400;
+  }
 }
