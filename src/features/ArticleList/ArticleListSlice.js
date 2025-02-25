@@ -9,7 +9,9 @@ const initialState = {
 };
 
 export const fetchArticles = createAsyncThunk('articles/fetchArticles', async (page = 0) => {
-  return await axios.get(`https://blog-platform.kata.academy/api/articles?offset=${page}&limit=20`).then((response) => response.data);
+  return await axios
+    .get(`https://blog-platform.kata.academy/api/articles?offset=${page}&limit=20`)
+    .then((response) => response.data);
 });
 
 const ArticleListSlice = createSlice({
@@ -22,7 +24,7 @@ const ArticleListSlice = createSlice({
     builder.addCase(fetchArticles.fulfilled, (state, actions) => {
       state.loading = false;
       state.articles = actions.payload.articles;
-      state.articlesCount = actions.payload.articlesCount
+      state.articlesCount = actions.payload.articlesCount;
       state.error = '';
     });
     builder.addCase(fetchArticles.rejected, (state, actions) => {
