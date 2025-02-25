@@ -36,7 +36,7 @@ const Article = ({ article }) => {
               </Typography>
             </Box>
             <Box>
-              <img src={img} alt="User Picture" />
+              <img src={author.image ? author.image : img} alt="User Picture" style={{ height: 50, width: 50 }} />
             </Box>
           </CardContent>
         </Grid2>
