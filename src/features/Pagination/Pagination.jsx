@@ -1,10 +1,10 @@
 import { createTheme, Pagination, Stack, ThemeProvider } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { fetchArticles } from '../ArticleList/ArticleListSlice';
+import { fetchArticles, selectArticlesCount } from '../ArticleList/ArticleListSlice';
 
 const ListPagination = () => {
-  const articlesCount = useSelector((state) => state.articles.articlesCount);
+  const articlesCount = useSelector(selectArticlesCount);
   const totalPages = Math.floor(articlesCount / 20);
   const dispatch = useDispatch();
 
@@ -24,7 +24,7 @@ const ListPagination = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Stack spacing={2} direction="row" sx={{ justifyContent: 'center' }}>
+      <Stack spacing={2} direction="row" sx={{ justifyContent: 'center', marginBottom: 3 }}>
         <Pagination shape="rounded" count={totalPages} color="primary" onChange={handlePageChange} />
       </Stack>
     </ThemeProvider>
@@ -32,5 +32,3 @@ const ListPagination = () => {
 };
 
 export default ListPagination;
-
-// color for buttons #1890FF

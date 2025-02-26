@@ -35,3 +35,5 @@ const ArticleListSlice = createSlice({
 });
 
 export default ArticleListSlice.reducer;
+
+export const selectArticlesCount = state => state.articles.articlesCount
