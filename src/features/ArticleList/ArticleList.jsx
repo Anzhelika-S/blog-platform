@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { CircularProgress, Alert, Box, Card } from '@mui/material';
+import { useSearchParams } from 'react-router';
 
 import Article from '../Article/Article';
 import ListPagination from '../Pagination/Pagination';
@@ -25,9 +26,13 @@ export const ArticleList = () => {
     loadingBox: { display: 'flex', height: 200, justifyContent: 'center', alignContent: 'center', flexWrap: 'wrap' },
   };
 
+  const [searchParams] = useSearchParams();
+  const currentPage = Number(searchParams.get('page')) || 1;
+
   useEffect(() => {
-    dispatch(fetchArticles());
-  }, [dispatch]);
+    const newOffset = (currentPage - 1) * 20;
+    dispatch(fetchArticles(newOffset));
+  }, [dispatch, currentPage]);
 
   return (
     <>

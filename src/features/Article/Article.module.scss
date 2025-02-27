@@ -1,0 +1,23 @@
+.link {
+  text-decoration: none;
+}
+
+.button {
+  background-color: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.tag {
+  display: inline-block;
+  border: lightgray 1px solid;
+  padding: 2px 3px;
+  background-color: #00000010;
+}
+
+.body {
+  max-width: 700px;
+  overflow-wrap: 'anywhere';
+}

@@ -1,17 +1,17 @@
-import { createTheme, Pagination, Stack, ThemeProvider } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
+import { createTheme, Pagination, PaginationItem, Stack, ThemeProvider } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { Link, useSearchParams } from 'react-router';
 
-import { fetchArticles, selectArticlesCount } from '../ArticleList/ArticleListSlice';
+import { selectArticlesCount } from '../ArticleList/ArticleListSlice';
 
 const ListPagination = () => {
   const articlesCount = useSelector(selectArticlesCount);
-  const totalPages = Math.floor(articlesCount / 20);
-  const dispatch = useDispatch();
+  const totalPages = Math.ceil(articlesCount / 20);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentPage = Number(searchParams.get('page')) || 1;
 
-  const handlePageChange = (evt, newPage) => {
-    const newOffset = (newPage - 1) * 20;
-
-    dispatch(fetchArticles(newOffset));
+  const handlePageChange = (_, newPage) => {
+    setSearchParams({ page: newPage });
   };
 
   const theme = createTheme({
@@ -25,7 +25,14 @@ const ListPagination = () => {
   return (
     <ThemeProvider theme={theme}>
       <Stack spacing={2} direction="row" sx={{ justifyContent: 'center', marginBottom: 3 }}>
-        <Pagination shape="rounded" count={totalPages} color="primary" onChange={handlePageChange} />
+        <Pagination
+          shape="rounded"
+          count={totalPages}
+          page={currentPage}
+          color="primary"
+          onChange={handlePageChange}
+          renderItem={(item) => <PaginationItem component={Link} to={`/articles/?page=${item.page}`} {...item} />}
+        />
       </Stack>
     </ThemeProvider>
   );

@@ -5,16 +5,25 @@ import { Link } from 'react-router';
 
 import img from '../../img/UserPicture.png';
 
+import styles from './Article.module.scss';
+
 const sxStyles = {
   gridContainer: { display: 'flex', flexWrap: 'nowrap', gap: 2 },
   leftSection: { flex: 3, display: 'flex', flexDirection: 'column', gap: 1 },
   rightSection: { flex: 1, display: 'flex', justifyContent: 'end', alignItems: 'start', gap: 1 },
   titleBox: { display: 'flex', alignItems: 'center', gap: 1 },
-  tags: { display: 'flex', gap: 1 },
+  tags: { display: 'flex', gap: 1, maxWidth: 600, overflow: 'hidden' },
   authorBox: { textAlign: 'end' },
   authorImage: { height: 50, width: 50 },
-  cardHeader: { color: '#1890FF', padding: 0 },
+  cardHeader: { color: '#1890FF', padding: 0, maxWidth: 600 },
   cardBody: { padding: 0, display: 'flex', flexDirection: 'column', gap: 1 },
+  headerText: {
+    maxWidth: 500,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  descriptionBox: { maxWidth: 600, overflowWrap: 'anywhere' },
 };
 
 const Article = ({ article }) => {
@@ -26,10 +35,10 @@ const Article = ({ article }) => {
       <Box sx={sxStyles.gridContainer}>
         <Box sx={sxStyles.leftSection}>
           <Box sx={sxStyles.titleBox}>
-            <Link to={`/articles/${slug}`} style={{ textDecoration: 'none' }}>
-              <CardHeader title={title} sx={sxStyles.cardHeader} />
+            <Link to={`/articles/${slug}`} className={styles.link}>
+              <CardHeader title={<Typography sx={sxStyles.headerText}>{title}</Typography>} sx={sxStyles.cardHeader} />
             </Link>
-            <button>
+            <button className={styles.button}>
               {favorited ? <FavoriteRounded /> : <FavoriteBorderRounded />}
               <span>{favoritesCount}</span>
             </button>
@@ -37,11 +46,13 @@ const Article = ({ article }) => {
           <CardContent sx={sxStyles.cardBody}>
             <Box sx={sxStyles.tags}>
               {tagList.map((tag, index) => (
-                <button key={index}>{tag}</button>
+                <div className={styles.tag} key={index}>
+                  {tag}
+                </div>
               ))}
             </Box>
-            <div>{description}</div>
-            <Markdown>{body}</Markdown>
+            <Box sx={sxStyles.descriptionBox}>{description}</Box>
+            <Markdown className={styles.body}>{body}</Markdown>
           </CardContent>
         </Box>
         <Box sx={sxStyles.rightSection}>
