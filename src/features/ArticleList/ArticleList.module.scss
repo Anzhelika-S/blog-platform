@@ -9,3 +9,9 @@
 
   width: 1000px;
 }
+
+.article {
+  max-height: 140px;
+  overflow: hidden;
+  position: relative;
+}
