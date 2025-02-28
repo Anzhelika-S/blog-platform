@@ -9,7 +9,7 @@ const initialState = {
 };
 
 export const loadArticles = createAsyncThunk('articles/fetchArticles', async (page) => {
-  return await fetchArticles(page)
+  return await fetchArticles(page);
 });
 
 const ArticleListSlice = createSlice({
@@ -17,19 +17,19 @@ const ArticleListSlice = createSlice({
   initialState,
   extraReducers: (builder) => {
     builder
-    .addCase(loadArticles.pending, (state) => {
-      state.loading = true;
-    })
-    .addCase(loadArticles.fulfilled, (state, actions) => {
-      state.loading = false;
-      state.articles = actions.payload.articles;
-      state.articlesCount = actions.payload.articlesCount;
-      state.error = '';
-    })
-    .addCase(loadArticles.rejected, (state, actions) => {
-      state.loading = false;
-      state.error = actions.error.message;
-    });
+      .addCase(loadArticles.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(loadArticles.fulfilled, (state, actions) => {
+        state.loading = false;
+        state.articles = actions.payload.articles;
+        state.articlesCount = actions.payload.articlesCount;
+        state.error = '';
+      })
+      .addCase(loadArticles.rejected, (state, actions) => {
+        state.loading = false;
+        state.error = actions.error.message;
+      });
   },
 });
 
