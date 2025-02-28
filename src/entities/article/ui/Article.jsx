@@ -2,8 +2,7 @@ import { CardContent, CardHeader, Box, Typography } from '@mui/material';
 import Markdown from 'markdown-to-jsx';
 import { FavoriteRounded, FavoriteBorderRounded } from '@mui/icons-material';
 import { Link } from 'react-router';
-
-import img from '../../img/UserPicture.png';
+import img from 'shared/assets/UserPicture.png';
 
 import styles from './Article.module.scss';
 

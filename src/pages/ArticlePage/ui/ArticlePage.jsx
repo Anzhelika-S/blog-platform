@@ -1,9 +1,8 @@
 import { useParams } from 'react-router';
 import { useSelector } from 'react-redux';
 import { Card } from '@mui/material';
-
-import { selectArticles } from '../features/ArticleList/ArticleListSlice';
-import Article from '../features/Article/Article';
+import { selectArticles } from 'features/ArticleList/model/ArticleListSlice';
+import Article from 'entities/article/ui/Article';
 
 const ArticlePage = () => {
   const { articles } = useSelector(selectArticles);

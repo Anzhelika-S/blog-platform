@@ -1,9 +1,7 @@
-import './App.css';
 import { Route, Routes } from 'react-router';
-
-import Header from '../components/header/Header';
-import { ArticleList } from '../features/ArticleList/ArticleList';
-import ArticlePage from '../pages/ArticlePage';
+import { Header } from 'widgets/header';
+import { ArticleList } from 'features/ArticleList';
+import { ArticlePage } from 'pages/ArticlePage';
 
 function App() {
   return (
@@ -13,6 +11,9 @@ function App() {
         <Route path="/articles" element={<ArticleList />} />
         <Route path="/" element={<ArticleList />} />
         <Route path="/articles/:slug" element={<ArticlePage />} />
+        <Route path="/sign-in" />
+        <Route path="/sign-up" />
+        <Route path="/profile" />
       </Routes>
     </>
   );

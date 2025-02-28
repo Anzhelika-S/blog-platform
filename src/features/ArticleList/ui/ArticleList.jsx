@@ -2,14 +2,14 @@ import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { CircularProgress, Alert, Box, Card } from '@mui/material';
 import { useSearchParams } from 'react-router';
+import { Article } from 'entities/article';
 
-import Article from '../Article/Article';
-import ListPagination from '../Pagination/Pagination';
+import { fetchArticles, selectArticles } from '../model/ArticleListSlice';
 
+import ListPagination from './Pagination';
 import styles from './ArticleList.module.scss';
-import { fetchArticles, selectArticles } from './ArticleListSlice';
 
-export const ArticleList = () => {
+const ArticleList = () => {
   const articles = useSelector(selectArticles);
   const dispatch = useDispatch();
   const sxStyles = {
@@ -60,3 +60,5 @@ export const ArticleList = () => {
     </>
   );
 };
+
+export default ArticleList;

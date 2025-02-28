@@ -2,7 +2,7 @@ import { createTheme, Pagination, PaginationItem, Stack, ThemeProvider } from '@
 import { useSelector } from 'react-redux';
 import { Link, useSearchParams } from 'react-router';
 
-import { selectArticlesCount } from '../ArticleList/ArticleListSlice';
+import { selectArticlesCount } from '../model/ArticleListSlice';
 
 const ListPagination = () => {
   const articlesCount = useSelector(selectArticlesCount);
