@@ -4,7 +4,7 @@ import { CircularProgress, Alert, Box, Card } from '@mui/material';
 import { useSearchParams } from 'react-router';
 import { Article } from 'entities/article';
 
-import { fetchArticles, selectArticles } from '../model/ArticleListSlice';
+import { loadArticles, selectArticles } from '../model/ArticleListSlice';
 
 import ListPagination from './Pagination';
 import styles from './ArticleList.module.scss';
@@ -31,7 +31,7 @@ const ArticleList = () => {
 
   useEffect(() => {
     const newOffset = (currentPage - 1) * 20;
-    dispatch(fetchArticles(newOffset));
+    dispatch(loadArticles(newOffset));
   }, [dispatch, currentPage]);
 
   return (

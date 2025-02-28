@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { fetchArticles } from 'shared/api';
 
 const initialState = {
   loading: false,
@@ -8,26 +8,25 @@ const initialState = {
   error: '',
 };
 
-export const fetchArticles = createAsyncThunk('articles/fetchArticles', async (page) => {
-  return await axios
-    .get(`https://blog-platform.kata.academy/api/articles?offset=${page}&limit=20`)
-    .then((response) => response.data);
+export const loadArticles = createAsyncThunk('articles/fetchArticles', async (page) => {
+  return await fetchArticles(page)
 });
 
 const ArticleListSlice = createSlice({
   name: 'articles',
   initialState,
   extraReducers: (builder) => {
-    builder.addCase(fetchArticles.pending, (state) => {
+    builder
+    .addCase(loadArticles.pending, (state) => {
       state.loading = true;
-    });
-    builder.addCase(fetchArticles.fulfilled, (state, actions) => {
+    })
+    .addCase(loadArticles.fulfilled, (state, actions) => {
       state.loading = false;
       state.articles = actions.payload.articles;
       state.articlesCount = actions.payload.articlesCount;
       state.error = '';
-    });
-    builder.addCase(fetchArticles.rejected, (state, actions) => {
+    })
+    .addCase(loadArticles.rejected, (state, actions) => {
       state.loading = false;
       state.error = actions.error.message;
     });
