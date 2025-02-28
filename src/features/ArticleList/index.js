@@ -1,3 +1,3 @@
-export {default as ArticleList} from './ui/ArticleList'
+export { default as ArticleList } from './ui/ArticleList';
 
-export * from './model/ArticleListSlice'
+export * from './model/ArticleListSlice';
