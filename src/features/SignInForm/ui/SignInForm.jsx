@@ -1,9 +1,9 @@
-import { Card, CardContent, Typography, Checkbox, Button, FormControlLabel } from "@mui/material";
+import { Card, CardContent, Typography, Button } from "@mui/material";
 import { Link } from "react-router";
 
-import styles from "./SignUpForm.module.scss";
+import styles from "./SignInForm.module.scss";
 
-const SignUpForm = () => {
+const SignInForm = () => {
   const sxStyles = {
     card: { display: "flex", flexDirection: "column", marginTop: 2, width: 380, padding: 2 },
     form: { display: "flex", flexDirection: "column", gap: 1 },
@@ -14,28 +14,19 @@ const SignUpForm = () => {
   return (
     <Card sx={sxStyles.card}>
       <CardContent>
-        <h2 className={styles.header}>Create new account</h2>
+        <h2 className={styles.header}>Sign In</h2>
         <form action="" className={styles.form}>
-          <label>Username</label>
-          <input type="text" required className={styles.input} />
           <label>Email address</label>
           <input type="text" required className={styles.input} />
           <label>Password</label>
           <input type="text" required className={styles.input} />
-          <label>Repeat Password</label>
-          <input type="text" required className={styles.input} />
-          <FormControlLabel
-            label="I agree to the processing of my personal information"
-            required
-            control={<Checkbox />}
-          />
           <Button variant="contained" sx={sxStyles.button}>
-            Create
+            Login
           </Button>
           <Typography sx={sxStyles.formSignIn}>
-            Already have an account?{" "}
-            <Link to="/sign-in" style={{ textDecoration: "none", color: "#1890FF" }}>
-              Sign in
+            Don&apos;t have an account?{" "}
+            <Link to="/sign-up" style={{ textDecoration: "none", color: "#1890FF" }}>
+              Sign up
             </Link>
             .
           </Typography>
@@ -45,4 +36,4 @@ const SignUpForm = () => {
   );
 };
 
-export default SignUpForm;
+export default SignInForm;

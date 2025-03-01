@@ -1,19 +1,19 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchArticles } from 'shared/api';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { fetchArticles } from "shared/api";
 
 const initialState = {
   loading: false,
   articles: [],
   articlesCount: 0,
-  error: '',
+  error: "",
 };
 
-export const loadArticles = createAsyncThunk('articles/fetchArticles', async (page) => {
+export const loadArticles = createAsyncThunk("articles/fetchArticles", async (page) => {
   return await fetchArticles(page);
 });
 
 const ArticleListSlice = createSlice({
-  name: 'articles',
+  name: "articles",
   initialState,
   extraReducers: (builder) => {
     builder
@@ -24,7 +24,7 @@ const ArticleListSlice = createSlice({
         state.loading = false;
         state.articles = actions.payload.articles;
         state.articlesCount = actions.payload.articlesCount;
-        state.error = '';
+        state.error = "";
       })
       .addCase(loadArticles.rejected, (state, actions) => {
         state.loading = false;

@@ -1,8 +1,8 @@
-import axios from 'axios';
+import axios from "axios";
 
 export const api = axios.create({
-  baseURL: 'https://blog-platform.kata.academy/api/',
+  baseURL: "https://blog-platform.kata.academy/api/",
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
