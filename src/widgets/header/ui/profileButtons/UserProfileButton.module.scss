@@ -1,0 +1,17 @@
+.profileButton {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    text-decoration: none;
+    color: #000000DE;
+}
+
+.userName {
+    font-size: 16px;
+}
+
+.userPicture {
+    height: 50px;
+    width: auto;
+    border-radius: 50%;
+}

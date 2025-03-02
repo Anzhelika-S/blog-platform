@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchArticles } from "shared/api";
+import { fetchArticles } from "entities/article/api/articlesApi.js";
 
 const initialState = {
   loading: false,
