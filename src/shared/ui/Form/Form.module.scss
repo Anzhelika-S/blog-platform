@@ -4,6 +4,7 @@
   border-radius: 2px;
   border: 1px solid lightgray;
   transition: all 0.2s ease-in-out;
+  margin-top: 10px;
 
   &:hover {
     box-shadow: 0 0 2px 1px #1890ff;
@@ -15,8 +16,27 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  font-size: 14px;
 }
 
 .header {
   text-align: center;
+}
+
+.inputError {
+  padding: 0 5px;
+  background-color: #1890ff20;
+  border: 1px solid #1890ff;
+  border-radius: 3px;
+  color: #1890ff;
+  font-weight: 600;
+}
+
+.checkboxLabel {
+  font-size: 16px;
+}
+
+.checkbox {
+  display: flex;
+  justify-content: space-between;
 }
