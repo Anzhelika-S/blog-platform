@@ -12,9 +12,15 @@
 
 .tag {
   display: inline-block;
-  border: lightgray 1px solid;
+  border: #69696954 1px solid;
+  border-radius: 2px;
   padding: 2px 3px;
   background-color: #00000010;
+  max-width: 80px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .body {

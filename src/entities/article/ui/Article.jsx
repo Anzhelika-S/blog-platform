@@ -1,4 +1,4 @@
-import { CardContent, CardHeader, Box, Typography } from "@mui/material";
+import { CardContent, CardHeader, Box, Typography, Avatar } from "@mui/material";
 import Markdown from "markdown-to-jsx";
 import { FavoriteRounded, FavoriteBorderRounded } from "@mui/icons-material";
 import { Link } from "react-router";
@@ -62,7 +62,7 @@ const Article = ({ article }) => {
             </Typography>
           </Box>
           <Box>
-            <img src={author.image || img} alt="User Picture" style={sxStyles.authorImage} />
+            <Avatar sx={{ width: 50, height: 50 }} src={author.image || img} alt={author.username} />
           </Box>
         </Box>
       </Box>
