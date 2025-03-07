@@ -1,7 +1,8 @@
 import { toast } from "react-toastify";
-import { createArticle, deleteArticle, getArticle } from "../api/articleApi";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { deleteArticleFromList } from "features/ArticleList/model/ArticleListSlice";
+
+import { createArticle, deleteArticle, getArticle, updateArticle } from "../api/articleApi";
 
 const initialState = {
   article: [],
@@ -22,6 +23,20 @@ export const postArticle = createAsyncThunk("article/post", async (article, { ge
 
   try {
     const response = await createArticle(JSON.stringify(article), token);
+    return response;
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+export const sendUpdateRequest = createAsyncThunk("article/update", async ({ article, slug }, { getState }) => {
+  const token = getState().auth.token || localStorage.getItem("token");
+  if (!token) return null;
+
+  console.log(slug);
+
+  try {
+    const response = await updateArticle(JSON.stringify(article), slug, token);
     return response;
   } catch (err) {
     console.log(err);
@@ -71,6 +86,15 @@ const articleSlice = createSlice({
       .addCase(postArticle.rejected, (state, action) => {
         state.error = action.payload;
         toast.error("Couldn't create an article, please try again");
+      })
+      .addCase(sendUpdateRequest.fulfilled, (state, action) => {
+        state.error = null;
+        state.article = action.payload.article;
+        toast.success("Article has been updated!");
+      })
+      .addCase(sendUpdateRequest.rejected, (state, action) => {
+        state.error = action.payload;
+        toast.error("Couldn't update an article, please try again");
       })
       .addCase(sendDeleteRequest.fulfilled, (state) => {
         state.article = null;

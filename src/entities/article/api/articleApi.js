@@ -10,6 +10,11 @@ export const createArticle = async (article, token) => {
   return response.data;
 };
 
+export const updateArticle = async (article, slug, token) => {
+  const response = await api.put(`/articles/${slug}`, article, { headers: { Authorization: `Token ${token}` } });
+  return response.data;
+};
+
 export const deleteArticle = async (slug, token) => {
   const response = await api.delete(`/articles/${slug}`, { headers: { Authorization: `Token ${token}` } });
   return response.data;

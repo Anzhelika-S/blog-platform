@@ -7,7 +7,8 @@ import { SignInPage } from "pages/SignInPage";
 import { useSelector } from "react-redux";
 import { selectToken } from "entities/auth/model/AuthSlice";
 import { UserProfilePage } from "pages/UserProfilePage";
-import { NewArticlePage } from "pages/NewArticlePage";
+import { CreateArticlePage } from "pages/CreateArticlePage";
+import { EditArticlePage } from "pages/EditArticlePage";
 
 function App() {
   const token = useSelector(selectToken);
@@ -22,7 +23,8 @@ function App() {
         <Route path="/sign-in" element={token ? <Navigate replace to="/" /> : <SignInPage />} />
         <Route path="/sign-up" element={token ? <Navigate replace to="/" /> : <SignUpPage />} />
         <Route path="/profile" element={<UserProfilePage />} />
-        <Route path="/new-article" element={!token ? <Navigate replace to="/sign-in" /> : <NewArticlePage />} />
+        <Route path="/new-article" element={!token ? <Navigate replace to="/sign-in" /> : <CreateArticlePage />} />
+        <Route path="/:slug/edit" element={!token ? <Navigate replace to="/sign-in" /> : <EditArticlePage />} />
       </Routes>
     </>
   );

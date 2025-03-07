@@ -8,6 +8,7 @@ import { useArticle } from "../model/useArticle";
 const sxStyles = {
   loadingBox: { display: "flex", height: 200, justifyContent: "center", alignContent: "center", flexWrap: "wrap" },
 };
+
 const ArticlePage = () => {
   const { slug } = useParams();
   const { article, isLoading, error } = useArticle(slug);

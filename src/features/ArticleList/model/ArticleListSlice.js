@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+
 import { fetchArticles } from "../api/articlesApi";
 
 const initialState = {

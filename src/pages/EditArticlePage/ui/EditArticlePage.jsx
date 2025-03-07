@@ -1,12 +1,12 @@
 import { Box } from "@mui/material";
-import { ArticleForm } from "features/ArticleForm";
+import { EditArticleForm } from "features/EditArticleForm";
 
-const NewArticlePage = () => {
+const EditArticlePage = () => {
   return (
     <Box sx={{ display: "flex", alignContent: "center", justifyContent: "center" }}>
-      <ArticleForm />
+      <EditArticleForm />
     </Box>
   );
 };
 
-export default NewArticlePage;
+export default EditArticlePage;

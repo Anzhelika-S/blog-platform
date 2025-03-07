@@ -1,9 +1,8 @@
 import { Card, CardContent, Button } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import styles from "shared/ui/Form/Form.module.scss";
-import { postArticle } from "entities/article/model/articleSlice";
-import { selectToken } from "entities/auth/model/AuthSlice";
+
+import { TagFieldArray } from "./TagFieldArray";
 
 const sxStyles = {
   card: { display: "flex", flexDirection: "column", marginTop: 4, width: 1000, padding: 2 },
@@ -12,45 +11,23 @@ const sxStyles = {
   button: { backgroundColor: "#1890FF", textTransform: "none" },
 };
 
-const ArticleForm = () => {
-  const dispatch = useDispatch();
-  const token = useSelector(selectToken) || JSON.parse(localStorage.getItem("token"));
-  console.log(token);
-
+const ArticleForm = ({ header, initialValues, onSubmit }) => {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm({
     mode: "onBlur",
+    defaultValues: {
+      tags: initialValues.tags,
+    },
   });
-
-  //    "article": {
-  //     "title": "string",
-  //     "description": "string",
-  //     "body": "string",
-  //     "tags": [
-  //       "string"
-  //     ]
-  //   }
-
-  const onSubmit = (data) => {
-    const article = {
-      article: {
-        title: data.title,
-        description: data.desc,
-        body: data.textBody,
-        tags: [],
-      },
-    };
-
-    dispatch(postArticle(article, token));
-  };
 
   return (
     <Card sx={sxStyles.card}>
       <CardContent>
-        <h2 className={styles.header}>Create new article</h2>
+        <h2 className={styles.header}>{header}</h2>
         <form action="" className={styles.form} onSubmit={handleSubmit(onSubmit)}>
           <label htmlFor="title">
             {" "}
@@ -60,6 +37,7 @@ const ArticleForm = () => {
               type="text"
               placeholder="Title"
               id="title"
+              defaultValue={initialValues.title}
               {...register("title", {
                 required: "Your article needs a title",
                 maxLength: 1000,
@@ -79,6 +57,7 @@ const ArticleForm = () => {
               type="text"
               placeholder="Title"
               id="desc"
+              defaultValue={initialValues.description}
               {...register("desc", {
                 required: "Your article needs a description",
                 maxLength: {
@@ -103,6 +82,7 @@ const ArticleForm = () => {
               rows={20}
               wrap="hard"
               id="textBody"
+              defaultValue={initialValues.body}
               {...register("textBody", {
                 required: "Your article shouldn't be empty",
                 minLength: 1,
@@ -112,6 +92,7 @@ const ArticleForm = () => {
               {errors?.textBody && <p className={styles.errorMessage}>{errors?.textBody?.message}</p>}
             </div>
           </label>
+          <TagFieldArray register={register} control={control} />
           <Button variant="contained" type="submit" sx={sxStyles.button}>
             Send
           </Button>
