@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchArticles } from "entities/article/api/articlesApi.js";
+import { fetchArticles } from "../api/articlesApi";
 
 const initialState = {
   loading: false,
@@ -15,6 +15,11 @@ export const loadArticles = createAsyncThunk("articles/fetchArticles", async (pa
 const ArticleListSlice = createSlice({
   name: "articles",
   initialState,
+  reducers: {
+    deleteArticleFromList: (state, action) => {
+      state.articles = state.articles.filter((article) => article.slug !== action.payload);
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(loadArticles.pending, (state) => {
@@ -33,6 +38,7 @@ const ArticleListSlice = createSlice({
   },
 });
 
+export const { deleteArticleFromList } = ArticleListSlice.actions;
 export default ArticleListSlice.reducer;
 
 export const selectArticlesCount = (state) => state.articles.articlesCount;

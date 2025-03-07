@@ -11,21 +11,21 @@ import { fetchUserInfo } from "entities/auth/model/AuthSlice";
 const sxStyles = {
   card: { display: "flex", flexDirection: "column", marginTop: 4, width: 380, padding: 2 },
   form: { display: "flex", flexDirection: "column", gap: 1 },
-  formSignIn: { alignSelf: "center", fontSize: 14 },
   button: { backgroundColor: "#1890FF", textTransform: "none" },
 };
+
+const imageUrlPattern = /^(https?:\/\/)?(.*\.(?:png|jpe?g|gif|webp|bmp|svg))$/i;
 
 const UserProfileForm = () => {
   const token = useSelector(selectToken) || JSON.parse(localStorage.getItem("token"));
   const dispatch = useDispatch();
+  const user = useSelector(selectUser);
 
   useEffect(() => {
     if (token && !user) {
       dispatch(fetchUserInfo(token));
     }
   }, [token, user, dispatch]);
-
-  const user = useSelector(selectUser);
 
   const {
     register,
@@ -130,6 +130,7 @@ const UserProfileForm = () => {
               id="avatar"
               {...register("avatar", {
                 required: "Required field",
+                pattern: imageUrlPattern,
               })}
             />
           </label>

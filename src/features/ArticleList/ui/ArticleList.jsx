@@ -9,22 +9,23 @@ import { loadArticles, selectArticles } from "../model/ArticleListSlice";
 import ListPagination from "./Pagination";
 import styles from "./ArticleList.module.scss";
 
+const sxStyles = {
+  boxShadow: {
+    content: '""',
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    width: "100%",
+    height: 70,
+    background: "linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1))",
+  },
+  card: { maxHeight: 140, padding: 2, overflow: "hidden", position: "relative" },
+  loadingBox: { display: "flex", height: 200, justifyContent: "center", alignContent: "center", flexWrap: "wrap" },
+};
+
 const ArticleList = () => {
   const articles = useSelector(selectArticles);
   const dispatch = useDispatch();
-  const sxStyles = {
-    boxShadow: {
-      content: '""',
-      position: "absolute",
-      bottom: 0,
-      left: 0,
-      width: "100%",
-      height: 70,
-      background: "linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1))",
-    },
-    card: { maxHeight: 140, padding: 2, overflow: "hidden", position: "relative" },
-    loadingBox: { display: "flex", height: 200, justifyContent: "center", alignContent: "center", flexWrap: "wrap" },
-  };
 
   const [searchParams] = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
@@ -49,7 +50,7 @@ const ArticleList = () => {
           {articles.articles.map((article) => {
             return (
               <Card component="li" key={article.slug} sx={sxStyles.card}>
-                <Article article={article} />
+                <Article article={article} showActions={false} />
                 <Box component="span" sx={sxStyles.boxShadow} />
               </Card>
             );
