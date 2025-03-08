@@ -14,8 +14,6 @@ const EditArticleForm = () => {
   const dispatch = useDispatch();
   const { slug } = useParams();
   const { article, isLoading } = useSelector((state) => state.article);
-  console.log("Article here ", article);
-
   const { title, description, body, tagList } = article;
 
   useEffect(() => {
