@@ -9,11 +9,13 @@ import { selectToken } from "entities/auth/model/AuthSlice";
 import { UserProfilePage } from "pages/UserProfilePage";
 import { CreateArticlePage } from "pages/CreateArticlePage";
 import { EditArticlePage } from "pages/EditArticlePage";
-import NotFoundPage from "pages/NotFoundPage/ui/NotFoundPage";
+import { NotFoundPage } from "pages/NotFoundPage";
+
+import ProtectedRoute from "../shared/ui/ProtectedRoute/ProtectedRoute";
 
 import ErrorBoundary from "./providers/ErrorBoundary";
 
-function App() {
+const App = () => {
   const token = useSelector(selectToken);
 
   return (
@@ -21,19 +23,44 @@ function App() {
       <Header />
       <ErrorBoundary>
         <Routes>
+          <Route path="/" element={<Navigate replace to="/articles" />} />
           <Route path="/articles" element={<ArticleList />} />
-          <Route path="/" element={<ArticleList />} />
+
           <Route path="/articles/:slug" element={<ArticlePage />} />
+          <Route
+            path="/articles/:slug/edit"
+            element={
+              <ProtectedRoute>
+                <EditArticlePage />
+              </ProtectedRoute>
+            }
+          />
+
           <Route path="/sign-in" element={token ? <Navigate replace to="/" /> : <SignInPage />} />
           <Route path="/sign-up" element={token ? <Navigate replace to="/" /> : <SignUpPage />} />
-          <Route path="/profile" element={!token ? <Navigate replace to="/sign-in" /> : <UserProfilePage />} />
-          <Route path="/new-article" element={!token ? <Navigate replace to="/sign-in" /> : <CreateArticlePage />} />
-          <Route path="/:slug/edit" element={!token ? <Navigate replace to="/sign-in" /> : <EditArticlePage />} />
+
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <UserProfilePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/new-article"
+            element={
+              <ProtectedRoute>
+                <CreateArticlePage />
+              </ProtectedRoute>
+            }
+          />
+
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </ErrorBoundary>
     </>
   );
-}
+};
 
 export default App;
