@@ -1,8 +1,8 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore } from '@reduxjs/toolkit'
 
-import articlesReducer from "../features/ArticleList/model/ArticleListSlice";
-import authReducer from "../entities/auth/model/AuthSlice";
-import articleReducer from "../entities/article/model/articleSlice";
+import articlesReducer from '../features/ArticleList/model/ArticleListSlice'
+import authReducer from '../entities/auth/model/AuthSlice'
+import articleReducer from '../entities/article/model/articleSlice'
 
 const store = configureStore({
   reducer: {
@@ -10,6 +10,6 @@ const store = configureStore({
     auth: authReducer,
     article: articleReducer,
   },
-});
+})
 
-export default store;
+export default store

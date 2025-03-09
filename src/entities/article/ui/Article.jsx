@@ -1,10 +1,12 @@
-import { CardContent, CardHeader, Button, Box, Typography, Avatar } from "@mui/material";
+import { CardContent, CardHeader, Button, Box, Typography, Avatar, Checkbox } from "@mui/material";
 import Markdown from "markdown-to-jsx";
 import { FavoriteRounded, FavoriteBorderRounded } from "@mui/icons-material";
 import { Link } from "react-router";
 import img from "shared/assets/UserPicture.png";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "entities/auth/model/AuthSlice";
+
+import { sendFavoriteRequest, sendUnfavoriteRequest } from "../model/articleSlice";
 
 import DeleteButton from "./DeleteButton";
 import styles from "./Article.module.scss";
@@ -38,6 +40,15 @@ const Article = ({ article, showActions }) => {
   const { body, description, title, createdAt, tagList, favorited, favoritesCount, author, slug } = article;
   const date = new Date(createdAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
   const loggedInUser = useSelector(selectUser);
+  const dispatch = useDispatch();
+
+  const handleFavorite = () => {
+    if (favorited) {
+      dispatch(sendUnfavoriteRequest(slug));
+    } else {
+      dispatch(sendFavoriteRequest(slug));
+    }
+  };
 
   return (
     <Box sx={sxStyles.gridContainer}>
@@ -49,10 +60,16 @@ const Article = ({ article, showActions }) => {
               sx={sxStyles.cardHeader}
             />
           </Link>
-          <button className={styles.button}>
-            {favorited ? <FavoriteRounded /> : <FavoriteBorderRounded />}
-            <span>{favoritesCount}</span>
-          </button>
+          <div className={styles.favorite}>
+            <Checkbox
+              onClick={handleFavorite}
+              disabled={!loggedInUser}
+              icon={<FavoriteBorderRounded />}
+              checkedIcon={<FavoriteRounded color="error" />}
+              checked={favorited}
+            />
+            {favoritesCount}
+          </div>
         </Box>
         <CardContent sx={sxStyles.cardBody}>
           <Box sx={showActions ? sxStyles.tagsView : sxStyles.tags}>
@@ -81,7 +98,7 @@ const Article = ({ article, showActions }) => {
         {loggedInUser?.username === author.username && showActions && (
           <Box sx={sxStyles.buttonsBox}>
             <DeleteButton slug={slug} />
-            <Link to={`/${slug}/edit`} className={styles.link}>
+            <Link to={`/articles/${slug}/edit`} className={styles.link}>
               <Button variant="outlined" color="success">
                 Edit
               </Button>

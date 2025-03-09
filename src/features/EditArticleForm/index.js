@@ -1,1 +1,1 @@
-export { default as EditArticleForm } from "./ui/EditArticleForm";
+export { default as EditArticleForm } from './ui/EditArticleForm'
