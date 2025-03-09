@@ -7,7 +7,7 @@ import SignInButton from "./visitorButtons/SignInButton";
 import styles from "./Header.module.scss";
 import SignUpButton from "./visitorButtons/SignUpButton";
 import CreateArticleButton from "./profileButtons/CreateArticleButton";
-import LogoutButton from "./profileButtons/LogOutButton";
+import LogoutButton from "./profileButtons/LogoutButton";
 import UserProfileButton from "./profileButtons/UserProfileButton";
 
 const Header = () => {
