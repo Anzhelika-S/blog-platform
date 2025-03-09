@@ -10,7 +10,7 @@ const CreateArticleForm = () => {
   const navigate = useNavigate();
 
   const handleCreate = (data) => {
-    const tags = data.tags.filter((tag) => tag.value !== "");
+    const tags = data.tags.filter((tag) => tag.value !== "" && tag.value.trim() !== "");
 
     const article = {
       article: {

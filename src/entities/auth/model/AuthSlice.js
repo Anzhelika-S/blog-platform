@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast, Slide } from "react-toastify";
+import { loadFavorited } from "features/ArticleList/model/ArticleListSlice";
 
 import { registerUser, loginUser, getUserInfo, editUserInfo } from "../api/userApi";
-import { loadFavorited } from "features/ArticleList/model/ArticleListSlice";
 
 const toastSuccess = {
   position: "top-left",

@@ -7,12 +7,12 @@ import { Avatar } from "@mui/material";
 import styles from "./UserProfileButton.module.scss";
 
 const UserProfileButton = () => {
-  const user = useSelector(selectUser) || JSON.parse(localStorage.getItem("user"));
+  const user = useSelector(selectUser);
 
   return (
     <Link to="/profile" className={styles.profileButton}>
-      <div className={styles.userName}>{user.username}</div>
-      <Avatar src={user.image || img} alt={user.username} />
+      <div className={styles.userName}>{user?.username}</div>
+      <Avatar src={user?.image || img} alt={user?.username} />
     </Link>
   );
 };

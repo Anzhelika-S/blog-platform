@@ -1,4 +1,4 @@
-import { toast } from "react-toastify";
+import { toast, Slide } from "react-toastify";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { deleteArticleFromList, updateArticleList } from "features/ArticleList/model/ArticleListSlice";
 
@@ -10,6 +10,30 @@ import {
   unfavoriteArticle,
   updateArticle,
 } from "../api/articleApi";
+
+const toastSuccess = {
+  position: "top-left",
+  autoClose: 2000,
+  hideProgressBar: false,
+  closeOnClick: false,
+  pauseOnHover: false,
+  draggable: true,
+  progress: undefined,
+  theme: "light",
+  transition: Slide,
+};
+
+const toastError = {
+  position: "top-left",
+  autoClose: 2000,
+  hideProgressBar: false,
+  closeOnClick: false,
+  pauseOnHover: false,
+  draggable: true,
+  progress: undefined,
+  theme: "light",
+  transition: Slide,
+};
 
 const updateLikedArticles = (slug, favorited) => {
   let likedArticles = JSON.parse(localStorage.getItem("likedArticles")) || [];
@@ -143,30 +167,30 @@ const articleSlice = createSlice({
       .addCase(postArticle.fulfilled, (state, action) => {
         state.error = null;
         state.article = action.payload.article;
-        toast.success("Article has been created!");
+        toast.success("Article has been created!", toastSuccess);
       })
       .addCase(postArticle.rejected, (state, action) => {
         state.error = action.payload;
-        toast.error("Couldn't create an article, please try again");
+        toast.error("Couldn't create an article, please try again", toastError);
       })
       .addCase(sendUpdateRequest.fulfilled, (state, action) => {
         state.error = null;
         state.article = action.payload.article;
-        toast.success("Article has been updated!");
+        toast.success("Article has been updated!", toastSuccess);
       })
       .addCase(sendUpdateRequest.rejected, (state, action) => {
         state.error = action.payload;
-        toast.error("Couldn't update an article, please try again");
+        toast.error("Couldn't update an article, please try again", toastError);
       })
       .addCase(sendDeleteRequest.fulfilled, (state) => {
         state.article = null;
         state.error = null;
-        toast.success("Article deleted");
+        toast.success("Article deleted", toastSuccess);
       })
       .addCase(sendDeleteRequest.rejected, (state, action) => {
         state.article = null;
         state.error = action.payload;
-        toast.error("Couldn't delete the article, please try again");
+        toast.error("Couldn't delete the article, please try again", toastError);
       })
       .addCase(sendFavoriteRequest.fulfilled, (state, action) => {
         state.article = action.payload.article;
@@ -174,7 +198,7 @@ const articleSlice = createSlice({
       })
       .addCase(sendFavoriteRequest.rejected, (state, action) => {
         state.error = action.payload;
-        toast.error("Couldn't favorite the article, please try again");
+        toast.error("Couldn't favorite the article, please try again", toastError);
       })
       .addCase(sendUnfavoriteRequest.fulfilled, (state, action) => {
         state.article = action.payload.article;
@@ -182,7 +206,7 @@ const articleSlice = createSlice({
       })
       .addCase(sendUnfavoriteRequest.rejected, (state, action) => {
         state.error = action.payload;
-        toast.error("Couldn't unfavorite the article, please try again");
+        toast.error("Couldn't unfavorite the article, please try again", toastError);
       });
   },
 });
