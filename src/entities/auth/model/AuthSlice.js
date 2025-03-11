@@ -1,32 +1,6 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { toast, Slide } from "react-toastify";
-import { loadFavorited } from "features/ArticleList/model/ArticleListSlice";
-
-import { registerUser, loginUser, getUserInfo, editUserInfo } from "../api/userApi";
-
-const toastSuccess = {
-  position: "top-left",
-  autoClose: 2000,
-  hideProgressBar: false,
-  closeOnClick: false,
-  pauseOnHover: false,
-  draggable: true,
-  progress: undefined,
-  theme: "light",
-  transition: Slide,
-};
-
-const toastError = {
-  position: "top-left",
-  autoClose: 2000,
-  hideProgressBar: false,
-  closeOnClick: false,
-  pauseOnHover: false,
-  draggable: true,
-  progress: undefined,
-  theme: "light",
-  transition: Slide,
-};
+import { createSlice } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
+import { toastSuccess } from "shared/ui/toasts/toastNotifications";
 
 const initialState = {
   user: null,
@@ -34,91 +8,27 @@ const initialState = {
   error: null,
 };
 
-export const sendRegistrationRequest = createAsyncThunk("auth/register", async (user) => {
-  const response = await registerUser(JSON.stringify(user));
-  localStorage.setItem("token", response.data.token);
-  return response.data;
-});
-
-export const sendLoginRequest = createAsyncThunk("auth/login", async (user, { dispatch }) => {
-  const response = await loginUser(JSON.stringify(user));
-  localStorage.setItem("token", response.user.token);
-  dispatch(loadFavorited(response.user.username));
-  return response;
-});
-
-export const fetchUserInfo = createAsyncThunk("auth/fetchUser", async (_, { getState }) => {
-  const token = getState().auth.token || localStorage.getItem("token");
-
-  if (!token) return null;
-
-  const response = await getUserInfo(token);
-  return response;
-});
-
-export const sendEditRequest = createAsyncThunk("auth/editUser", async (user, { getState }) => {
-  const token = getState().auth.token || localStorage.getItem("token");
-
-  if (!token) return null;
-  const response = await editUserInfo(user, token);
-  return response;
-});
-
-export const logout = createAsyncThunk("auth/logout", async () => {
-  localStorage.removeItem("token");
-  localStorage.removeItem("likedArticles");
-});
-
 const AuthSlice = createSlice({
   name: "auth",
   initialState,
-  extraReducers: (builder) => {
-    builder
-      .addCase(sendRegistrationRequest.fulfilled, (state, action) => {
-        state.user = action.payload.user;
-        state.token = action.payload.user.token;
-        state.error = action.payload;
-        toast.success("Now you are registered!", toastSuccess);
-      })
-      .addCase(sendRegistrationRequest.rejected, (state, action) => {
-        state.error = action.payload;
-        toast.error("Something went wrong, try again", toastError);
-      })
-      .addCase(sendLoginRequest.fulfilled, (state, action) => {
-        toast.success("You're logged in!", toastSuccess);
+  reducers: {
+    setUser: (state, action) => {
+      state.user = action.payload;
+      state.token = action.payload.token;
+      state.error = null;
+    },
+    logout: (state) => {
+      state.user = null;
+      state.token = null;
+      state.error = null;
 
-        state.user = action.payload.user;
-        state.token = action.payload.user.token;
-        state.error = action.payload;
-      })
-      .addCase(sendLoginRequest.rejected, (state, action) => {
-        state.error = action.payload;
-        toast.error("Email or password is invalid, try again", toastError);
-      })
-      .addCase(fetchUserInfo.fulfilled, (state, action) => {
-        state.user = action.payload.user;
-        state.error = null;
-      })
-      .addCase(fetchUserInfo.rejected, (state, action) => {
-        state.error = action.payload;
-      })
-      .addCase(sendEditRequest.fulfilled, (state, action) => {
-        state.user = action.payload.user;
-        state.error = null;
-        toast.success("Info edited successfully :)", toastSuccess);
-      })
-      .addCase(sendEditRequest.rejected, (state, action) => {
-        state.error = action.payload;
-        toast.error("Something went wrong, try again", toastError);
-      })
-      .addCase(logout.fulfilled, (state) => {
-        toast.success("You logged out", toastSuccess);
-        state.user = null;
-        state.token = null;
-      });
+      localStorage.removeItem("token");
+      toast.success("You have logged out", toastSuccess);
+    },
   },
 });
 
+export const { setUser, logout } = AuthSlice.actions;
 export default AuthSlice.reducer;
 
 export const selectToken = (state) => state.auth?.token;

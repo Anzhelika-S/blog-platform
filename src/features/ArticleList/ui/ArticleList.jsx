@@ -1,10 +1,7 @@
-import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import { CircularProgress, Alert, Box, Card } from "@mui/material";
 import { useSearchParams } from "react-router";
 import { Article } from "entities/article";
-
-import { loadArticles, selectArticles } from "../model/ArticleListSlice";
+import { useFetchArticlesQuery } from "shared/api/blogApi";
 
 import ListPagination from "./Pagination";
 import styles from "./ArticleList.module.scss";
@@ -24,28 +21,21 @@ const sxStyles = {
 };
 
 const ArticleList = () => {
-  const articles = useSelector(selectArticles);
-  const dispatch = useDispatch();
-
   const [searchParams] = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
+  const newOffset = (currentPage - 1) * 20;
 
-  useEffect(() => {
-    const newOffset = (currentPage - 1) * 20;
-    dispatch(loadArticles(newOffset));
-  }, [dispatch, currentPage]);
+  const { data: articles, error, isLoading } = useFetchArticlesQuery(newOffset);
 
   return (
     <>
-      {!articles.loading && articles.error ? (
+      {error ? (
         <Alert severity="error">Something went wrong, try reloading the page</Alert>
-      ) : null}
-      {articles.loading && (
+      ) : isLoading ? (
         <Box sx={sxStyles.loadingBox}>
           <CircularProgress />
         </Box>
-      )}
-      {!articles.loading && !articles.error ? (
+      ) : !error && !isLoading && articles.articles ? (
         <ul className={styles.list}>
           {articles.articles.map((article) => {
             return (
@@ -57,7 +47,8 @@ const ArticleList = () => {
           })}
         </ul>
       ) : null}
-      <ListPagination />
+
+      <ListPagination articlesCount={articles?.articlesCount} />
     </>
   );
 };

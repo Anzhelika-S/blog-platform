@@ -1,12 +1,13 @@
 import { Card, CardContent, Button } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import styles from "shared/ui/Form/Form.module.scss";
-import { selectUser } from "entities/auth/model/AuthSlice";
-import { sendEditRequest } from "entities/auth/model/AuthSlice";
-import { selectToken } from "entities/auth/model/AuthSlice";
-import { useEffect } from "react";
-import { fetchUserInfo } from "entities/auth/model/AuthSlice";
+import { useEditUserInfoMutation } from "shared/api/blogApi";
+import { setUser } from "entities/auth/model/AuthSlice";
+import { useNavigate } from "react-router";
+import { useGetUserInfoQuery } from "shared/api/blogApi";
+import { toast } from "react-toastify";
+import { toastSuccess, toastError } from "shared/ui/toasts/toastNotifications";
 
 const sxStyles = {
   card: { display: "flex", flexDirection: "column", marginTop: 4, width: 380, padding: 2 },
@@ -17,15 +18,12 @@ const sxStyles = {
 const imageUrlPattern = /^(https?:\/\/)?(.*\.(?:png|jpe?g|gif|webp|bmp|svg))$/i;
 
 const UserProfileForm = () => {
-  const token = useSelector(selectToken) || JSON.parse(localStorage.getItem("token"));
   const dispatch = useDispatch();
-  const user = useSelector(selectUser);
-
-  useEffect(() => {
-    if (token && !user) {
-      dispatch(fetchUserInfo(token));
-    }
-  }, [token, user, dispatch]);
+  const {
+    data: { user },
+  } = useGetUserInfoQuery();
+  const [editUser, { error }] = useEditUserInfoMutation();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -35,14 +33,19 @@ const UserProfileForm = () => {
     mode: "onBlur",
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
-
+  const onSubmit = async (data) => {
     const user = {
       user: { username: data.userName, email: data.email, password: data.password, image: data.avatar },
     };
 
-    dispatch(sendEditRequest(user));
+    try {
+      const response = await editUser(user).unwrap();
+      dispatch(setUser(response.user));
+      toast.success("Profile updated", toastSuccess);
+      navigate("/");
+    } catch {
+      toast.error(`Couldn't update the profile: ${Object.entries(error.data.errors).flat().join(" ")}`, toastError);
+    }
   };
 
   return (
@@ -51,7 +54,6 @@ const UserProfileForm = () => {
         <h2 className={styles.header}>Edit Profile</h2>
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
           <label htmlFor="username">
-            {" "}
             Username
             <input
               id="username"
@@ -71,7 +73,6 @@ const UserProfileForm = () => {
           </label>
 
           <label htmlFor="email">
-            {" "}
             Email
             <input
               className={(errors?.email && `${styles.error} ${styles.input}`) || styles.input}
@@ -95,7 +96,6 @@ const UserProfileForm = () => {
           </label>
 
           <label htmlFor="password">
-            {" "}
             New password
             <input
               className={(errors?.password && `${styles.error} ${styles.input}`) || styles.input}
@@ -121,7 +121,6 @@ const UserProfileForm = () => {
           </label>
 
           <label htmlFor="avatar">
-            {" "}
             Avatar image &#40;url&#41;
             <input
               className={(errors?.avatar && `${styles.error} ${styles.input}`) || styles.input}

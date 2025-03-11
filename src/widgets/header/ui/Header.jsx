@@ -1,6 +1,3 @@
-import { fetchUserInfo, selectToken } from "entities/auth/model/AuthSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
 import { Link } from "react-router";
 
 import SignInButton from "./visitorButtons/SignInButton";
@@ -11,15 +8,7 @@ import LogoutButton from "./profileButtons/LogoutButton";
 import UserProfileButton from "./profileButtons/UserProfileButton";
 
 const Header = () => {
-  const dispatch = useDispatch();
-  const token = useSelector(selectToken) || JSON.parse(localStorage.getItem("token"));
-  const user = useSelector((state) => state.auth.user);
-
-  useEffect(() => {
-    if (token && !user) {
-      dispatch(fetchUserInfo(token));
-    }
-  }, [token, user, dispatch]);
+  const token = localStorage.getItem("token");
 
   return (
     <header className={styles.header}>

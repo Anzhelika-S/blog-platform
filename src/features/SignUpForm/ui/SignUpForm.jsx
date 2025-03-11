@@ -1,19 +1,25 @@
 import { Card, CardContent, Typography, Checkbox, Button } from "@mui/material";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import styles from "shared/ui/Form/Form.module.scss";
 import { useDispatch } from "react-redux";
-import { sendRegistrationRequest } from "entities/auth/model/AuthSlice";
+import { useRegisterUserMutation } from "shared/api/blogApi";
+import { toast } from "react-toastify";
+import { toastError } from "shared/ui/toasts/toastNotifications";
+
+import { setUser } from "../../../entities/auth/model/AuthSlice";
+
+const sxStyles = {
+  card: { display: "flex", flexDirection: "column", marginTop: 4, width: 380, padding: 2 },
+  form: { display: "flex", flexDirection: "column", gap: 1 },
+  formSignIn: { alignSelf: "center", fontSize: 14 },
+  button: { backgroundColor: "#1890FF", textTransform: "none" },
+};
 
 const SignUpForm = () => {
-  const sxStyles = {
-    card: { display: "flex", flexDirection: "column", marginTop: 4, width: 380, padding: 2 },
-    form: { display: "flex", flexDirection: "column", gap: 1 },
-    formSignIn: { alignSelf: "center", fontSize: 14 },
-    button: { backgroundColor: "#1890FF", textTransform: "none" },
-  };
-
   const dispatch = useDispatch();
+  const [registerUser, { error }] = useRegisterUserMutation();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -23,12 +29,19 @@ const SignUpForm = () => {
     mode: "onBlur",
   });
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     const user = {
       user: { username: data.userName, email: data.email, password: data.password },
     };
+    try {
+      const response = await registerUser(user).unwrap();
 
-    dispatch(sendRegistrationRequest(user));
+      localStorage.setItem("token", response.user.token);
+      dispatch(setUser(response.user));
+      navigate("/");
+    } catch (e) {
+      toast.error(`Couldn't register user: ${Object.entries(error.data.errors).flat().join(" ")}`, toastError);
+    }
   };
 
   return (

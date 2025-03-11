@@ -5,8 +5,7 @@ import styles from "./CreateArticleButton.module.scss";
 const CreateArticleButton = () => {
   return (
     <Link to="/new-article" className={styles.button}>
-      {" "}
-      Create article{" "}
+      Create article
     </Link>
   );
 };

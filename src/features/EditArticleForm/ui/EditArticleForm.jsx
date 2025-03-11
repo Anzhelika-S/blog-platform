@@ -1,24 +1,38 @@
-import { useDispatch, useSelector } from "react-redux";
-import { sendUpdateRequest } from "entities/article/model/articleSlice";
 import ArticleForm from "shared/ui/ArticleForm/ArticleForm";
-import { useParams } from "react-router";
-import { useEffect } from "react";
-import { fetchArticle } from "entities/article/model/articleSlice";
+import { useNavigate, useParams } from "react-router";
 import { Box, CircularProgress } from "@mui/material";
+import { useFetchArticleQuery, useUpdateArticleMutation } from "shared/api/blogApi";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { toastError, toastSuccess } from "shared/ui/toasts/toastNotifications";
 
 const sxStyles = {
   loadingBox: { display: "flex", height: 200, justifyContent: "center", alignContent: "center", flexWrap: "wrap" },
 };
 
 const EditArticleForm = () => {
-  const dispatch = useDispatch();
   const { slug } = useParams();
-  const { article, isLoading } = useSelector((state) => state.article);
-  const { title, description, body, tagList } = article;
+  const { data: article, isLoading, error: fetchError } = useFetchArticleQuery(slug);
+  const [updateArticle, { error: updateError }] = useUpdateArticleMutation();
+
+  const [formValues, setFormValues] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(fetchArticle(slug));
-  }, [slug, dispatch]);
+    if (fetchError) {
+      toast.error("Couldn't load the article, try again", toastError);
+    }
+
+    if (article) {
+      setFormValues({
+        title: article.article.title,
+        description: article.article.description,
+        body: article.article.body,
+        tags: article.article.tagList?.map((tag) => ({ value: tag })) || [],
+      });
+    }
+  }, [article, fetchError]);
 
   const handleEdit = (data) => {
     const tags = data.tags.filter((tag) => tag.value !== "");
@@ -31,7 +45,13 @@ const EditArticleForm = () => {
       },
     };
 
-    dispatch(sendUpdateRequest({ article, slug }));
+    try {
+      updateArticle({ article, slug });
+      toast.success("Article has been updated!", toastSuccess);
+      navigate("/");
+    } catch {
+      toast.error(`Couldn't update the article: ${Object.entries(updateError.data.errors).join(" ")}`, toastError);
+    }
   };
 
   return (
@@ -41,16 +61,7 @@ const EditArticleForm = () => {
           <CircularProgress />
         </Box>
       ) : (
-        <ArticleForm
-          initialValues={{
-            title: title,
-            description: description,
-            body: body,
-            tags: tagList?.map((tag) => ({ value: tag })),
-          }}
-          header={"Edit article"}
-          onSubmit={handleEdit}
-        />
+        <ArticleForm initialValues={formValues} header={"Edit article"} onSubmit={handleEdit} />
       )}
     </>
   );

@@ -1,15 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 
-import articlesReducer from "../features/ArticleList/model/ArticleListSlice";
-import authReducer from "../entities/auth/model/AuthSlice";
-import articleReducer from "../entities/article/model/articleSlice";
+import authReducer from "entities/auth/model/AuthSlice";
+import blogApi from "shared/api/blogApi";
 
 const store = configureStore({
   reducer: {
-    articles: articlesReducer,
     auth: authReducer,
-    article: articleReducer,
+    [blogApi.reducerPath]: blogApi.reducer,
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(blogApi.middleware),
 });
 
 export default store;

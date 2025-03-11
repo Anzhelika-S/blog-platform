@@ -1,19 +1,25 @@
 import { Card, CardContent, Typography, Button } from "@mui/material";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import styles from "shared/ui/Form/Form.module.scss";
 import { useDispatch } from "react-redux";
-import { sendLoginRequest } from "entities/auth/model/AuthSlice";
+import { useLoginUserMutation } from "shared/api/blogApi";
+import { setUser } from "entities/auth/model/AuthSlice";
+import { toast } from "react-toastify";
+import { toastError } from "shared/ui/toasts/toastNotifications";
+
+const sxStyles = {
+  card: { display: "flex", flexDirection: "column", marginTop: 4, width: 380, padding: 2 },
+  form: { display: "flex", flexDirection: "column", gap: 1 },
+  formSignIn: { alignSelf: "center" },
+  button: { backgroundColor: "#1890FF", textTransform: "none" },
+};
 
 const SignInForm = () => {
-  const sxStyles = {
-    card: { display: "flex", flexDirection: "column", marginTop: 4, width: 380, padding: 2 },
-    form: { display: "flex", flexDirection: "column", gap: 1 },
-    formSignIn: { alignSelf: "center" },
-    button: { backgroundColor: "#1890FF", textTransform: "none" },
-  };
-
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [loginUser, { error }] = useLoginUserMutation();
 
   const {
     register,
@@ -23,7 +29,7 @@ const SignInForm = () => {
     mode: "onBlur",
   });
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     const user = {
       user: {
         email: data.email,
@@ -31,7 +37,14 @@ const SignInForm = () => {
       },
     };
 
-    dispatch(sendLoginRequest(user));
+    try {
+      const response = await loginUser(user).unwrap();
+      dispatch(setUser(response.user));
+      localStorage.setItem("token", response.user.token);
+      navigate("/");
+    } catch {
+      toast.error(`Couldn't login user: ${Object.entries(error.data.errors).flat().join(" ")}`, toastError);
+    }
   };
 
   return (

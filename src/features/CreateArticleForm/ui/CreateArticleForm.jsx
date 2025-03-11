@@ -1,13 +1,12 @@
-import { useDispatch, useSelector } from "react-redux";
-import { postArticle } from "entities/article/model/articleSlice";
-import { selectToken } from "entities/auth/model/AuthSlice";
 import ArticleForm from "shared/ui/ArticleForm/ArticleForm";
 import { useNavigate } from "react-router";
+import { useCreateArticleMutation } from "shared/api/blogApi";
+import { toast } from "react-toastify";
+import { toastError, toastSuccess } from "shared/ui/toasts/toastNotifications";
 
 const CreateArticleForm = () => {
-  const dispatch = useDispatch();
-  const token = useSelector(selectToken) || JSON.parse(localStorage.getItem("token"));
   const navigate = useNavigate();
+  const [createArticle, { error }] = useCreateArticleMutation();
 
   const handleCreate = (data) => {
     const tags = data.tags.filter((tag) => tag.value !== "" && tag.value.trim() !== "");
@@ -20,9 +19,14 @@ const CreateArticleForm = () => {
         tagList: tags.map((tag) => tag.value),
       },
     };
+    try {
+      createArticle(article);
+      toast.success("Article has been created!", toastSuccess);
 
-    dispatch(postArticle(article, token));
-    navigate("/");
+      navigate("/");
+    } catch {
+      toast.error(`Couldn't create the article: ${Object.entries(error.data.errors).join(" ")}`, toastError);
+    }
   };
 
   return (

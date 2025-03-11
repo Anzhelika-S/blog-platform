@@ -3,10 +3,9 @@ import Markdown from "markdown-to-jsx";
 import { FavoriteRounded, FavoriteBorderRounded } from "@mui/icons-material";
 import { Link } from "react-router";
 import img from "shared/assets/UserPicture.png";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { selectUser } from "entities/auth/model/AuthSlice";
-
-import { sendFavoriteRequest, sendUnfavoriteRequest } from "../model/articleSlice";
+import { useFavoriteArticleMutation, useUnfavoriteArticleMutation } from "shared/api/blogApi";
 
 import DeleteButton from "./DeleteButton";
 import styles from "./Article.module.scss";
@@ -38,15 +37,18 @@ const sxStyles = {
 
 const Article = ({ article, showActions }) => {
   const { body, description, title, createdAt, tagList, favorited, favoritesCount, author, slug } = article;
+
   const date = new Date(createdAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
   const loggedInUser = useSelector(selectUser);
-  const dispatch = useDispatch();
+
+  const [favoriteArticle] = useFavoriteArticleMutation();
+  const [unfavoriteArticle] = useUnfavoriteArticleMutation();
 
   const handleFavorite = () => {
-    if (favorited) {
-      dispatch(sendUnfavoriteRequest(slug));
+    if (!favorited) {
+      favoriteArticle(slug);
     } else {
-      dispatch(sendFavoriteRequest(slug));
+      unfavoriteArticle(slug);
     }
   };
 

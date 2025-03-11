@@ -1,16 +1,17 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { Popover, Typography, Button, Box } from "@mui/material";
 import { Error } from "@mui/icons-material";
-
-import { sendDeleteRequest } from "../model/articleSlice";
+import { useDeleteArticleMutation } from "shared/api/blogApi";
+import { toast } from "react-toastify";
+import { toastSuccess, toastError } from "shared/ui/toasts/toastNotifications";
 
 const DeleteButton = ({ slug }) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [deleteArticle, { error }] = useDeleteArticleMutation();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -21,9 +22,14 @@ const DeleteButton = ({ slug }) => {
   };
 
   const handleConfirmDelete = async () => {
-    await dispatch(sendDeleteRequest(slug)).unwrap();
-    navigate("/");
-    handleClose();
+    try {
+      await deleteArticle(slug).unwrap();
+      handleClose();
+      toast.success("Article has been deleted", toastSuccess);
+      navigate("/");
+    } catch {
+      toast.error(`Couldn't delete the article: ${Object.entries(error.data.errors).join(" ")}`, toastError);
+    }
   };
 
   const open = Boolean(anchorEl);

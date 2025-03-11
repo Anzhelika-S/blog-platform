@@ -1,6 +1,7 @@
 import { Card, CardContent, Button } from "@mui/material";
 import { useForm } from "react-hook-form";
 import styles from "shared/ui/Form/Form.module.scss";
+import { useEffect } from "react";
 
 import { TagFieldArray } from "./TagFieldArray";
 
@@ -16,13 +17,28 @@ const ArticleForm = ({ header, initialValues, onSubmit }) => {
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm({
     mode: "onBlur",
     defaultValues: {
-      tags: initialValues.tags,
+      title: initialValues?.title || "",
+      desc: initialValues?.description || "",
+      textBody: initialValues?.body || "",
+      tags: initialValues?.tags || [{ value: "" }],
     },
   });
+
+  useEffect(() => {
+    if (initialValues) {
+      reset({
+        title: initialValues.title,
+        desc: initialValues.description,
+        textBody: initialValues.body,
+        tags: initialValues.tags || [{ value: "" }],
+      });
+    }
+  }, [initialValues, reset]);
 
   return (
     <Card sx={sxStyles.card}>
@@ -37,7 +53,7 @@ const ArticleForm = ({ header, initialValues, onSubmit }) => {
               type="text"
               placeholder="Title"
               id="title"
-              defaultValue={initialValues.title}
+              defaultValue={initialValues?.title}
               {...register("title", {
                 required: "Your article needs a title",
                 maxLength: 1000,
@@ -57,7 +73,7 @@ const ArticleForm = ({ header, initialValues, onSubmit }) => {
               type="text"
               placeholder="Title"
               id="desc"
-              defaultValue={initialValues.description}
+              defaultValue={initialValues?.description}
               {...register("desc", {
                 required: "Your article needs a description",
                 maxLength: {
@@ -82,7 +98,7 @@ const ArticleForm = ({ header, initialValues, onSubmit }) => {
               rows={20}
               wrap="hard"
               id="textBody"
-              defaultValue={initialValues.body}
+              defaultValue={initialValues?.body}
               {...register("textBody", {
                 required: "Your article shouldn't be empty",
                 minLength: 1,

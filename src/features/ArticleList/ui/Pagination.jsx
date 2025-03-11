@@ -1,11 +1,7 @@
 import { createTheme, Pagination, PaginationItem, Stack, ThemeProvider } from "@mui/material";
-import { useSelector } from "react-redux";
 import { Link, useSearchParams } from "react-router";
 
-import { selectArticlesCount } from "../model/ArticleListSlice";
-
-const ListPagination = () => {
-  const articlesCount = useSelector(selectArticlesCount);
+const ListPagination = ({ articlesCount }) => {
   const totalPages = Math.ceil(articlesCount / 20);
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
