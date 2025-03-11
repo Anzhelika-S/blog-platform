@@ -1,3 +1,3 @@
 # Blog Platform
 
-https://blog-platform-beta-flax.vercel.app
+https://blog-platform-new.vercel.app
