@@ -14,6 +14,7 @@ const EditArticleForm = () => {
   const { slug } = useParams();
   const { data: article, isLoading, error: fetchError } = useFetchArticleQuery(slug);
   const [updateArticle, { error: updateError, isLoading: isLoadingUpdate }] = useUpdateArticleMutation();
+  const token = localStorage.getItem("token");
 
   const [formValues, setFormValues] = useState(null);
 
@@ -25,6 +26,10 @@ const EditArticleForm = () => {
     }
 
     if (article) {
+      if (article.article.author.token !== token) {
+        navigate(`/articles/${slug}`);
+      }
+
       setFormValues({
         title: article.article.title,
         description: article.article.description,
