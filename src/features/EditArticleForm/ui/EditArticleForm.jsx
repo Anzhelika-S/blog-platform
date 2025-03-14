@@ -30,14 +30,14 @@ const EditArticleForm = () => {
     if (article) {
       if (article.article.author.username !== loggedInUser.username) {
         navigate(`/articles/${slug}`);
+      } else {
+        setFormValues({
+          title: article.article.title,
+          description: article.article.description,
+          body: article.article.body,
+          tags: article.article.tagList?.map((tag) => ({ value: tag })) || [],
+        });
       }
-
-      setFormValues({
-        title: article.article.title,
-        description: article.article.description,
-        body: article.article.body,
-        tags: article.article.tagList?.map((tag) => ({ value: tag })) || [],
-      });
     }
   }, [article, fetchError]);
 
