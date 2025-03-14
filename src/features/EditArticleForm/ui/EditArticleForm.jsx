@@ -5,6 +5,8 @@ import { useFetchArticleQuery, useUpdateArticleMutation } from "shared/api/blogA
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { toastError, toastSuccess } from "shared/ui/toasts/toastNotifications";
+import { useSelector } from "react-redux";
+import { selectUser } from "entities/auth/model/AuthSlice";
 
 const sxStyles = {
   loadingBox: { display: "flex", height: 200, justifyContent: "center", alignContent: "center", flexWrap: "wrap" },
@@ -14,7 +16,7 @@ const EditArticleForm = () => {
   const { slug } = useParams();
   const { data: article, isLoading, error: fetchError } = useFetchArticleQuery(slug);
   const [updateArticle, { error: updateError, isLoading: isLoadingUpdate }] = useUpdateArticleMutation();
-  const token = localStorage.getItem("token");
+  const loggedInUser = useSelector(selectUser);
 
   const [formValues, setFormValues] = useState(null);
 
@@ -26,7 +28,7 @@ const EditArticleForm = () => {
     }
 
     if (article) {
-      if (article.article.author.token !== token) {
+      if (article.article.author.username !== loggedInUser.username) {
         navigate(`/articles/${slug}`);
       }
 
@@ -54,8 +56,8 @@ const EditArticleForm = () => {
       updateArticle({ article, slug });
       toast.success("Article has been updated!", toastSuccess);
       navigate(`/articles/${slug}`);
-    } catch {
-      toast.error(`Couldn't update the article: ${Object.entries(updateError.data.errors).join(" ")}`, toastError);
+    } catch (err) {
+      toast.error(`Couldn't update the article: ${Object.entries(err.data.errors).join(" ")}`, toastError);
     }
   };
 
@@ -71,6 +73,7 @@ const EditArticleForm = () => {
           header={"Edit article"}
           onSubmit={handleEdit}
           isLoading={isLoadingUpdate}
+          error={updateError}
         />
       )}
     </>

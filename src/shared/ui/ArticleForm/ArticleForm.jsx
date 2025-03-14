@@ -1,4 +1,4 @@
-import { Card, CardContent, Button } from "@mui/material";
+import { Card, CardContent, Button, Alert } from "@mui/material";
 import { useForm } from "react-hook-form";
 import styles from "shared/ui/Form/Form.module.scss";
 import { useEffect } from "react";
@@ -12,7 +12,7 @@ const sxStyles = {
   button: { backgroundColor: "#1890FF", textTransform: "none" },
 };
 
-const ArticleForm = ({ header, initialValues, onSubmit, isLoading }) => {
+const ArticleForm = ({ header, initialValues, onSubmit, isLoading, error }) => {
   const {
     register,
     handleSubmit,
@@ -109,6 +109,9 @@ const ArticleForm = ({ header, initialValues, onSubmit, isLoading }) => {
             </div>
           </label>
           <TagFieldArray register={register} control={control} />
+
+          {error && <Alert severity="error">{Object.entries(error.data.errors).flat().join(" ")}</Alert>}
+
           <Button disabled={isLoading} variant="contained" type="submit" sx={sxStyles.button}>
             Send
           </Button>

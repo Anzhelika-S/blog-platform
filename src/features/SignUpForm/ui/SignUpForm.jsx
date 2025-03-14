@@ -1,4 +1,4 @@
-import { Card, CardContent, Typography, Checkbox, Button } from "@mui/material";
+import { Card, CardContent, Typography, Checkbox, Button, Alert } from "@mui/material";
 import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import styles from "shared/ui/Form/Form.module.scss";
@@ -38,8 +38,8 @@ const SignUpForm = () => {
       localStorage.setItem("token", response.user.token);
       dispatch(setUser(response.user));
       navigate("/");
-    } catch (e) {
-      toast.error(`Couldn't register user: ${Object.entries(error.data.errors).flat().join(" ")}`, toastError);
+    } catch (err) {
+      toast.error(`Couldn't register user: ${Object.entries(err.data.errors).flat().join(" ")}`, toastError);
     }
   };
 
@@ -143,6 +143,8 @@ const SignUpForm = () => {
             <Checkbox id="checkbox" required />
             <label htmlFor="checkbox">I agree to the processing of my personal information</label>
           </div>
+
+          {error && <Alert severity="error">{Object.entries(error.data.errors).flat().join(" ")}</Alert>}
 
           <Button variant="contained" type="submit" disabled={!isValid || isLoading} sx={sxStyles.button}>
             Create

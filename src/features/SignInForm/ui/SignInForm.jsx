@@ -1,4 +1,4 @@
-import { Card, CardContent, Typography, Button } from "@mui/material";
+import { Card, CardContent, Typography, Button, Alert } from "@mui/material";
 import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import styles from "shared/ui/Form/Form.module.scss";
@@ -42,8 +42,8 @@ const SignInForm = () => {
       dispatch(setUser(response.user));
       localStorage.setItem("token", response.user.token);
       navigate("/");
-    } catch {
-      toast.error(`Couldn't login user: ${Object.entries(error.data.errors).flat().join(" ")}`, toastError);
+    } catch (err) {
+      toast.error(`Couldn't login user: ${Object.entries(err.data.errors).flat().join(" ")}`, toastError);
     }
   };
 
@@ -100,6 +100,8 @@ const SignInForm = () => {
               )}
             </div>
           </label>
+          {error && <Alert severity="error">{Object.entries(error.data.errors).flat().join(" ")}</Alert>}
+
           <Button disabled={isLoading} variant="contained" type="submit" sx={sxStyles.button}>
             Login
           </Button>

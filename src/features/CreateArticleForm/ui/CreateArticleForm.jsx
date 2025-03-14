@@ -23,8 +23,8 @@ const CreateArticleForm = () => {
       const { article: newArticle } = await createArticle(article).unwrap();
       toast.success("Article has been created!", toastSuccess);
       navigate(`/articles/${newArticle.slug}`);
-    } catch {
-      toast.error(`Couldn't create the article: ${Object.entries(error.data.errors).join(" ")}`, toastError);
+    } catch (err) {
+      toast.error(`Couldn't create the article: ${Object.entries(err.data.errors).join(" ")}`, toastError);
     }
   };
 
@@ -34,6 +34,7 @@ const CreateArticleForm = () => {
       header={"Create new article"}
       onSubmit={handleCreate}
       isLoading={isLoading}
+      error={error}
     />
   );
 };

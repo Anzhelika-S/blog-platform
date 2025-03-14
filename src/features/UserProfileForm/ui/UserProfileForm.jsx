@@ -1,4 +1,4 @@
-import { Card, CardContent, Button } from "@mui/material";
+import { Card, CardContent, Button, Alert } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import styles from "shared/ui/Form/Form.module.scss";
@@ -43,8 +43,8 @@ const UserProfileForm = () => {
       dispatch(setUser(response.user));
       toast.success("Profile updated", toastSuccess);
       navigate("/");
-    } catch {
-      toast.error(`Couldn't update the profile: ${Object.entries(error.data.errors).flat().join(" ")}`, toastError);
+    } catch (err) {
+      toast.error(`Couldn't update the profile: ${Object.entries(err.data.errors).flat().join(" ")}`, toastError);
     }
   };
 
@@ -133,6 +133,9 @@ const UserProfileForm = () => {
               })}
             />
           </label>
+
+          {error && <Alert severity="error">{Object.entries(error.data.errors).flat().join(" ")}</Alert>}
+
           <Button variant="contained" type="submit" disabled={isLoading} sx={sxStyles.button}>
             Save
           </Button>
