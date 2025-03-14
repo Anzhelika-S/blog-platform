@@ -6,9 +6,9 @@ import { toastError, toastSuccess } from "shared/ui/toasts/toastNotifications";
 
 const CreateArticleForm = () => {
   const navigate = useNavigate();
-  const [createArticle, { error }] = useCreateArticleMutation();
+  const [createArticle, { error, isLoading }] = useCreateArticleMutation();
 
-  const handleCreate = (data) => {
+  const handleCreate = async (data) => {
     const tags = data.tags.filter((tag) => tag.value !== "" && tag.value.trim() !== "");
 
     const article = {
@@ -20,10 +20,9 @@ const CreateArticleForm = () => {
       },
     };
     try {
-      createArticle(article);
+      const { article: newArticle } = await createArticle(article).unwrap();
       toast.success("Article has been created!", toastSuccess);
-
-      navigate("/");
+      navigate(`/articles/${newArticle.slug}`);
     } catch {
       toast.error(`Couldn't create the article: ${Object.entries(error.data.errors).join(" ")}`, toastError);
     }
@@ -34,6 +33,7 @@ const CreateArticleForm = () => {
       initialValues={{ title: "", description: "", body: "", tags: [{ value: "" }] }}
       header={"Create new article"}
       onSubmit={handleCreate}
+      isLoading={isLoading}
     />
   );
 };

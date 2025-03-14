@@ -13,7 +13,7 @@ const sxStyles = {
 const EditArticleForm = () => {
   const { slug } = useParams();
   const { data: article, isLoading, error: fetchError } = useFetchArticleQuery(slug);
-  const [updateArticle, { error: updateError }] = useUpdateArticleMutation();
+  const [updateArticle, { error: updateError, isLoading: isLoadingUpdate }] = useUpdateArticleMutation();
 
   const [formValues, setFormValues] = useState(null);
 
@@ -48,7 +48,7 @@ const EditArticleForm = () => {
     try {
       updateArticle({ article, slug });
       toast.success("Article has been updated!", toastSuccess);
-      navigate("/");
+      navigate(`/articles/${slug}`);
     } catch {
       toast.error(`Couldn't update the article: ${Object.entries(updateError.data.errors).join(" ")}`, toastError);
     }
@@ -61,7 +61,12 @@ const EditArticleForm = () => {
           <CircularProgress />
         </Box>
       ) : (
-        <ArticleForm initialValues={formValues} header={"Edit article"} onSubmit={handleEdit} />
+        <ArticleForm
+          initialValues={formValues}
+          header={"Edit article"}
+          onSubmit={handleEdit}
+          isLoading={isLoadingUpdate}
+        />
       )}
     </>
   );

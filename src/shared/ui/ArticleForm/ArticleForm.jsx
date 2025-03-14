@@ -12,7 +12,7 @@ const sxStyles = {
   button: { backgroundColor: "#1890FF", textTransform: "none" },
 };
 
-const ArticleForm = ({ header, initialValues, onSubmit }) => {
+const ArticleForm = ({ header, initialValues, onSubmit, isLoading }) => {
   const {
     register,
     handleSubmit,
@@ -109,7 +109,7 @@ const ArticleForm = ({ header, initialValues, onSubmit }) => {
             </div>
           </label>
           <TagFieldArray register={register} control={control} />
-          <Button variant="contained" type="submit" sx={sxStyles.button}>
+          <Button disabled={isLoading} variant="contained" type="submit" sx={sxStyles.button}>
             Send
           </Button>
         </form>

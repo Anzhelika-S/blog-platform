@@ -6,8 +6,7 @@ import { useDispatch } from "react-redux";
 import { useRegisterUserMutation } from "shared/api/blogApi";
 import { toast } from "react-toastify";
 import { toastError } from "shared/ui/toasts/toastNotifications";
-
-import { setUser } from "../../../entities/auth/model/AuthSlice";
+import { setUser } from "entities/auth/model/AuthSlice";
 
 const sxStyles = {
   card: { display: "flex", flexDirection: "column", marginTop: 4, width: 380, padding: 2 },
@@ -18,7 +17,7 @@ const sxStyles = {
 
 const SignUpForm = () => {
   const dispatch = useDispatch();
-  const [registerUser, { error }] = useRegisterUserMutation();
+  const [registerUser, { error, isLoading }] = useRegisterUserMutation();
   const navigate = useNavigate();
 
   const {
@@ -145,7 +144,7 @@ const SignUpForm = () => {
             <label htmlFor="checkbox">I agree to the processing of my personal information</label>
           </div>
 
-          <Button variant="contained" type="submit" disabled={!isValid} sx={sxStyles.button}>
+          <Button variant="contained" type="submit" disabled={!isValid || isLoading} sx={sxStyles.button}>
             Create
           </Button>
           <Typography sx={sxStyles.formSignIn}>

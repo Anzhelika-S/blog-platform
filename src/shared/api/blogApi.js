@@ -37,7 +37,7 @@ const blogApi = createApi({
       invalidatesTags: ["Users"],
     }),
     getUserInfo: builder.query({
-      query: () => `user`,
+      query: () => "user",
       providesTags: ["Users"],
     }),
     editUserInfo: builder.mutation({

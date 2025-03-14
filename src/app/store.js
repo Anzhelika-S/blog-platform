@@ -1,5 +1,4 @@
 import { configureStore } from "@reduxjs/toolkit";
-
 import authReducer from "entities/auth/model/AuthSlice";
 import blogApi from "shared/api/blogApi";
 

@@ -19,7 +19,7 @@ const SignInForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [loginUser, { error }] = useLoginUserMutation();
+  const [loginUser, { error, isLoading }] = useLoginUserMutation();
 
   const {
     register,
@@ -100,7 +100,7 @@ const SignInForm = () => {
               )}
             </div>
           </label>
-          <Button variant="contained" type="submit" sx={sxStyles.button}>
+          <Button disabled={isLoading} variant="contained" type="submit" sx={sxStyles.button}>
             Login
           </Button>
           <Typography sx={sxStyles.formSignIn}>

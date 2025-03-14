@@ -22,7 +22,7 @@ const UserProfileForm = () => {
   const {
     data: { user },
   } = useGetUserInfoQuery();
-  const [editUser, { error }] = useEditUserInfoMutation();
+  const [editUser, { error, isLoading }] = useEditUserInfoMutation();
   const navigate = useNavigate();
 
   const {
@@ -133,7 +133,7 @@ const UserProfileForm = () => {
               })}
             />
           </label>
-          <Button variant="contained" type="submit" sx={sxStyles.button}>
+          <Button variant="contained" type="submit" disabled={isLoading} sx={sxStyles.button}>
             Save
           </Button>
         </form>

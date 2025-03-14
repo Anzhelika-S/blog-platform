@@ -2,16 +2,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { Popover, Typography, Button, Box } from "@mui/material";
 import { Error } from "@mui/icons-material";
-import { useDeleteArticleMutation } from "shared/api/blogApi";
 import { toast } from "react-toastify";
 import { toastSuccess, toastError } from "shared/ui/toasts/toastNotifications";
 
-const DeleteButton = ({ slug }) => {
+const DeleteButton = ({ slug, isLoading, deleteArticle, error }) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const navigate = useNavigate();
-
-  const [deleteArticle, { error }] = useDeleteArticleMutation();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -36,7 +33,7 @@ const DeleteButton = ({ slug }) => {
 
   return (
     <>
-      <Button variant="outlined" color="error" onClick={handleClick}>
+      <Button variant="outlined" color="error" disabled={isLoading} onClick={handleClick}>
         Delete
       </Button>
       <Popover
@@ -58,10 +55,10 @@ const DeleteButton = ({ slug }) => {
             Are you sure to delete this article?
           </Typography>
           <Box sx={{ display: "flex", justifyContent: "end", alignItems: "center", gap: 1 }}>
-            <Button variant="outlined" size="small" color="info" onClick={handleClose}>
+            <Button variant="outlined" size="small" color="info" disabled={isLoading} onClick={handleClose}>
               No
             </Button>
-            <Button variant="contained" size="small" color="primary" onClick={handleConfirmDelete}>
+            <Button variant="contained" size="small" color="primary" disabled={isLoading} onClick={handleConfirmDelete}>
               Yes
             </Button>
           </Box>

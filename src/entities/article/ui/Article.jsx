@@ -5,6 +5,7 @@ import { Link } from "react-router";
 import img from "shared/assets/UserPicture.png";
 import { useSelector } from "react-redux";
 import { selectUser } from "entities/auth/model/AuthSlice";
+import { useDeleteArticleMutation } from "shared/api/blogApi";
 import { useFavoriteArticleMutation, useUnfavoriteArticleMutation } from "shared/api/blogApi";
 
 import DeleteButton from "./DeleteButton";
@@ -43,6 +44,7 @@ const Article = ({ article, showActions }) => {
 
   const [favoriteArticle] = useFavoriteArticleMutation();
   const [unfavoriteArticle] = useUnfavoriteArticleMutation();
+  const [deleteArticle, { isLoading, error }] = useDeleteArticleMutation();
 
   const handleFavorite = () => {
     if (!favorited) {
@@ -99,9 +101,9 @@ const Article = ({ article, showActions }) => {
         </Box>
         {loggedInUser?.username === author.username && showActions && (
           <Box sx={sxStyles.buttonsBox}>
-            <DeleteButton slug={slug} />
+            <DeleteButton slug={slug} deleteArticle={deleteArticle} isLoading={isLoading} deleteError={error} />
             <Link to={`/articles/${slug}/edit`} className={styles.link}>
-              <Button variant="outlined" color="success">
+              <Button variant="outlined" disabled={isLoading} color="success">
                 Edit
               </Button>
             </Link>
