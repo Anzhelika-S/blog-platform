@@ -1,3 +1,3 @@
 # Blog Platform
 
-https://blog-platform-beta-flax.vercel.app
+https://blog-platform-git-rtk-query-anzh01s-projects.vercel.app
