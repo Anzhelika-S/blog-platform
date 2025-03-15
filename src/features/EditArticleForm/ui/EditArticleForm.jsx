@@ -28,7 +28,7 @@ const EditArticleForm = () => {
     }
 
     if (article) {
-      if (article.article.author.username !== loggedInUser.username) {
+      if (article.article.author.username !== loggedInUser?.username) {
         navigate(`/articles/${slug}`);
       } else {
         setFormValues({
