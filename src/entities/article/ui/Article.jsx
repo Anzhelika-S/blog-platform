@@ -54,6 +54,8 @@ const Article = ({ article, showActions }) => {
     }
   };
 
+  const editedBody = body?.replace(/^---/g, " --- ");
+
   return (
     <Box sx={sxStyles.gridContainer}>
       <Box sx={sxStyles.leftSection}>
@@ -84,7 +86,9 @@ const Article = ({ article, showActions }) => {
             ))}
           </Box>
           <Box sx={sxStyles.descriptionBox}>{description}</Box>
-          <Markdown className={styles.body}>{body}</Markdown>
+          <Markdown options={{ forceBlock: true }} className={styles.body}>
+            {editedBody}
+          </Markdown>
         </CardContent>
       </Box>
       <Box sx={sxStyles.rightSection}>
